@@ -1,84 +1,50 @@
 # 校园超艺术托马森观察档案
 
-一个基于 `Astro + TypeScript` 的静态网站，用于展示《社会调查与研究方法课程》中同学们在校园田野调查中拍摄到的“超艺术托马森”作品。当前版本采用偏废土档案的视觉方向，专注展示作品本身，不再包含校园地图模块。
+这是一个用于展示浙江大学 2025-2026 学年春夏学期《社会调查与研究方法》课程田野作品的静态网站。
+
+网站收录同学们在校园调查中拍摄到的“超艺术托马森”观察样本，并以废弃基础设施与空间残余的档案方式重新陈列。
+
+## 项目结构
+
+这个仓库只保留网站运行和发布所必需的内容：
+
+- `src/`：页面与组件源码
+- `public/works/`：站点实际使用的作品图片
+- `.github/workflows/deploy.yml`：GitHub Pages 自动部署配置
+- `astro.config.mjs`：Astro 构建与 Pages 路径配置
+
+原始素材、临时构建产物和本地缓存文件不再纳入公开仓库。
 
 ## 技术栈
 
 - Astro
 - TypeScript
 - CSS Modules + 全局 CSS
-- GitHub Actions + GitHub Pages
+- GitHub Actions
+- GitHub Pages
 
-## 安装依赖
+## 本地运行
 
 ```bash
 npm install
-```
-
-## 导入本地作品素材
-
-当前项目使用的原始素材目录是：
-
-```text
-webpage素材/
-```
-
-运行下面的命令后，脚本会：
-
-- 读取 `webpage素材/` 中的图片素材；
-- 将作品图片复制到 `public/works/`；
-- 重命名为稳定路径，例如 `work-001.jpg`；
-- 根据文件名自动生成 `src/data/works.ts`；
-- 输出需要人工确认的异常文件列表。
-
-```bash
-npm run import:works
-```
-
-### 文件名规则
-
-- 标准格式：`名字-作品名.jpg`
-- 只有作者：`名字.jpg` 或 `名字1.jpg`
-
-当前脚本也兼容少量变体：
-
-- `名字—作品名`
-- `名字–作品名`
-- `名字 作品名`
-
-其中“空格分隔”的文件会被列入导入报告里的 `parsedByWhitespaceFallback`，方便后续人工复核。
-
-## 本地预览
-
-```bash
 npm run dev
 ```
 
-## 构建
+## 本地构建
 
 ```bash
 npm run build
 ```
 
-## 添加新作品
+## 作品数据维护
 
-推荐把新作品图片放进 `webpage素材/`，并尽量使用：
+网站内容统一维护在：
 
-- `名字-作品名.jpg`
-- `名字.jpg`
-- `名字1.jpg`
-
-然后重新运行：
-
-```bash
-npm run import:works
+```text
+src/data/works.ts
 ```
 
-如果需要手动微调，也可以直接编辑 [src/data/works.ts](/Users/lizhangrui/Desktop/大学/TA/2026春夏社会调查与研究方法/超托马森物体web page/src/data/works.ts)。
-
-## 数据维护方式
-
-站点内容统一从 [src/data/works.ts](/Users/lizhangrui/Desktop/大学/TA/2026春夏社会调查与研究方法/超托马森物体web page/src/data/works.ts) 读取。每条作品数据包含：
+每条作品数据包含：
 
 - `id`
 - `image`
@@ -86,28 +52,39 @@ npm run import:works
 - `title`
 - `author`
 
-页面组件不会硬编码图片路径，后续维护时优先更新数据文件。
+如果需要调整作品标题、作者、展示顺序，直接修改 `src/data/works.ts` 即可。
 
-## GitHub Pages 部署
+## 图片资源位置
 
-项目已包含 GitHub Actions 工作流：[.github/workflows/deploy.yml](/Users/lizhangrui/Desktop/大学/TA/2026春夏社会调查与研究方法/超托马森物体web page/.github/workflows/deploy.yml)
+站点实际展示的图片统一放在：
 
-部署步骤：
-
-1. 将项目推送到 GitHub 仓库的 `main` 分支。
-2. 进入仓库 Settings -> Pages。
-3. 在 Build and deployment 中选择 `GitHub Actions`。
-4. 推送后工作流会自动执行 `npm install`、`npm run build` 并部署 `dist/`。
-
-### `site` 和 `base` 的说明
-
-- `base` 已在 [astro.config.mjs](/Users/lizhangrui/Desktop/大学/TA/2026春夏社会调查与研究方法/超托马森物体web page/astro.config.mjs) 中自动根据 `GITHUB_REPOSITORY` 推导：
-  - 如果仓库名是 `<username>.github.io`，则使用 `/`
-  - 否则使用 `/<repo-name>/`
-- `site` 默认读取环境变量 `SITE_URL`，本地未设置时会使用占位值 `https://example.github.io`
-
-如果你希望本地构建时也完全贴合真实线上地址，可以把 [astro.config.mjs](/Users/lizhangrui/Desktop/大学/TA/2026春夏社会调查与研究方法/超托马森物体web page/astro.config.mjs) 里的默认值改成你自己的域名，例如：
-
-```js
-site: "https://yourname.github.io"
+```text
+public/works/
 ```
+
+如果后续要替换某张图片，建议保留现有文件名路径，例如：
+
+```text
+public/works/work-001.jpg
+```
+
+这样不需要同步改动数据文件中的图片路径。
+
+## GitHub Pages 发布
+
+仓库已包含 GitHub Pages 工作流：
+
+```text
+.github/workflows/deploy.yml
+```
+
+发布步骤：
+
+1. 将仓库推送到 GitHub 的 `main` 分支
+2. 打开仓库 `Settings > Pages`
+3. 将 `Source` 设置为 `GitHub Actions`
+4. 每次推送后，GitHub 会自动执行 `npm install`、`npm run build` 并发布站点
+
+## 说明
+
+本仓库面向公开展示与课程交流，已经去除了原始素材堆、构建缓存和本地中间文件，以便老师和同学更清楚地查看网站本体内容。
