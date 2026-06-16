@@ -1,0 +1,286 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import WorkCard from "../components/WorkCard.astro";
+import { works } from "../data/works";
+
+const title = "校园超艺术托马森观察档案";
+const subtitle = "社会调查与研究方法课程 · 校园田野作品集";
+const intro =
+  "这些照片记录了校园中那些原有功能已经消失、却仍然以奇异方式存在的物件与结构。它们不再服务于明确目的，却像被空间无意保留下来的痕迹，成为我们观察校园、制度、日常生活与建筑缝隙的入口。";
+const concept =
+  "超艺术托马森并不是被创作出来的艺术，而是那些在日常空间中偶然显现的、无用却被保留下来的结构。它们的功能已经消失，但存在本身却变得值得观看。";
+
+const positiveKeywordWeights = [
+  ["废弃", 10],
+  ["闲置", 9],
+  ["失效", 9],
+  ["封死", 9],
+  ["退休", 8],
+  ["形同虚设", 8],
+  ["开不了", 8],
+  ["禁止通行", 8],
+  ["过去时", 8],
+  ["死路", 8],
+  ["没用", 8],
+  ["无主", 7],
+  ["围栏", 7],
+  ["围挡", 7],
+  ["路障", 7],
+  ["被拦住", 7],
+  ["被当墙用", 7],
+  ["取款机", 7],
+  ["电表", 7],
+  ["药箱", 7],
+  ["校门", 6],
+  ["桥", 6],
+  ["窗", 6],
+  ["门", 6],
+  ["开关", 6],
+  ["柜子", 6],
+  ["告示牌", 6],
+  ["布告栏", 6],
+  ["公示栏", 6],
+  ["台阶", 6],
+  ["空调", 5],
+  ["蘑菇灯", 5],
+  ["石墩", 5],
+  ["架", 5],
+  ["栏", 5],
+  ["杆", 5],
+  ["管", 5]
+] as const;
+
+const negativeKeywordWeights = [
+  ["花园", -6],
+  ["神秘", -4],
+  ["某种", -3],
+  ["麦麦", -7],
+  ["雪碧", -7],
+  ["鼠鼠", -7]
+] as const;
+
+const scoreWork = (work: (typeof works)[number]) => {
+  const source = `${work.title?.trim() || ""} ${work.originalFileName}`;
+  let score = work.title?.trim() ? 20 : 0;
+
+  for (const [keyword, weight] of positiveKeywordWeights) {
+    if (source.includes(keyword)) {
+      score += weight;
+    }
+  }
+
+  for (const [keyword, weight] of negativeKeywordWeights) {
+    if (source.includes(keyword)) {
+      score += weight;
+    }
+  }
+
+  return score;
+};
+
+const basePath = import.meta.env.BASE_URL;
+const toAssetPath = (path: string) => `${basePath}${path.replace(/^\//, "")}`;
+const displayWorks = [...works].sort((a, b) => {
+  const titleDelta = Number(Boolean(b.title?.trim())) - Number(Boolean(a.title?.trim()));
+  if (titleDelta !== 0) {
+    return titleDelta;
+  }
+
+  const scoreDelta = scoreWork(b) - scoreWork(a);
+  if (scoreDelta !== 0) {
+    return scoreDelta;
+  }
+
+  return a.id.localeCompare(b.id, "zh-Hans-CN-u-kn-true", { numeric: true });
+});
+
+const worksForClient = displayWorks.map((work) => ({
+  id: work.id,
+  title: work.title?.trim() || "未命名",
+  author: work.author?.trim() || "匿名观察者",
+  image: toAssetPath(work.image)
+}));
+---
+
+<BaseLayout title={title} description={subtitle}>
+  <main class="pageShell">
+    <section class="hero">
+      <div class="heroBackdrop" aria-hidden="true">
+        <div class="sunDisc"></div>
+        <div class="ridge ridgeBack"></div>
+        <div class="ridge ridgeMid"></div>
+        <div class="ridge ridgeFront"></div>
+        <div class="wreck wreckLeft"></div>
+        <div class="wreck wreckRight"></div>
+      </div>
+
+      <div class="heroGrid">
+        <div class="heroCopy">
+          <span class="eyebrow">Campus Ruin Survey / Thomasson Archive</span>
+          <h1>
+            <span class="heroTitleLine heroTitleLinePrimary">校园超艺术托马森</span>
+            <span class="heroTitleLine">观察档案</span>
+          </h1>
+          <p class="heroSubtitle">{subtitle}</p>
+          <p class="heroLead">{intro}</p>
+          <p class="heroNote">{concept}</p>
+        </div>
+
+        <aside class="heroAside">
+          <div class="archiveCard">
+            <h2 class="archiveCardTitle">档案说明</h2>
+            <p>
+              本站收录浙江大学2025-2026学年春夏学期《社会调查与研究方法》课程中同学们在校园田野调查里拍摄到的“超艺术托马森”观察样本，以废弃基础设施与空间残余的档案方式重新陈列。
+            </p>
+          </div>
+          <div class="archiveCard">
+            <h2 class="archiveCardTitle">观察线索</h2>
+            <ul class="archiveList">
+              <li>重点关注那些原本有用、后来失效、但仍被保留下来的结构。</li>
+              <li>它们可能是楼梯、围栏、门、窗口、开关、管道或其他建筑残余。</li>
+              <li>这不是城市幻想，而是对校园内部荒芜、错位与失效功能的冷静凝视。</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="works-heading">
+      <div class="sectionHeader">
+        <div>
+          <span class="eyebrow">Field Index / Salvaged Remains</span>
+          <h2 id="works-heading">田野作品索引</h2>
+        </div>
+      </div>
+
+      <div class="worksMasonry" data-masonry>
+        {displayWorks.map((work) => <WorkCard work={work} basePath={basePath} />)}
+      </div>
+    </section>
+
+    <p class="footerNote">
+      共收录 {works.length} 件作品。后续可通过重新运行导入脚本或直接编辑数据文件来修订标题、作者与展示顺序。
+    </p>
+  </main>
+
+  <dialog class="dialog" data-work-dialog>
+    <div class="dialogShell">
+      <div class="dialogMedia">
+        <img data-dialog-image src="" alt="" />
+      </div>
+      <div class="dialogBody">
+        <button type="button" class="dialogClose" data-dialog-close aria-label="关闭大图">
+          关闭
+        </button>
+        <div class="dialogMeta">
+          <span class="statusTag">Recovered Record</span>
+          <h3 data-dialog-title></h3>
+          <dl>
+            <dt>作者</dt>
+            <dd data-dialog-author></dd>
+            <dt>编号</dt>
+            <dd data-dialog-id></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script type="application/json" id="works-data" set:html={JSON.stringify(worksForClient)}></script>
+  <script>
+    const worksDataEl = document.getElementById("works-data");
+    const dialog = document.querySelector("[data-work-dialog]");
+    const masonry = document.querySelector("[data-masonry]");
+    const imageEl = dialog?.querySelector("[data-dialog-image]");
+    const titleEl = dialog?.querySelector("[data-dialog-title]");
+    const authorEl = dialog?.querySelector("[data-dialog-author]");
+    const idEl = dialog?.querySelector("[data-dialog-id]");
+    const closeEl = dialog?.querySelector("[data-dialog-close]");
+    const worksData = worksDataEl ? JSON.parse(worksDataEl.textContent || "[]") : [];
+    const openWork = (id, shouldScroll = false) => {
+      const work = worksData.find((entry) => entry.id === id);
+      if (!dialog || !work || !imageEl || !titleEl || !authorEl || !idEl) {
+        return;
+      }
+
+      imageEl.src = work.image;
+      imageEl.alt = `${work.title}，作者 ${work.author}`;
+      titleEl.textContent = work.title;
+      authorEl.textContent = work.author;
+      idEl.textContent = work.id;
+      dialog.showModal();
+
+      if (shouldScroll) {
+        document.getElementById(`work-${id}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    };
+
+    document.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) {
+        return;
+      }
+
+      const trigger = target.closest("[data-open-work]");
+      if (trigger instanceof HTMLElement) {
+        const id = trigger.dataset.openWork;
+        const shouldScroll = trigger.hasAttribute("data-target-card");
+        if (id) {
+          openWork(id, shouldScroll);
+        }
+      }
+
+      if (target === dialog) {
+        dialog.close();
+      }
+    });
+
+    closeEl?.addEventListener("click", () => {
+      dialog?.close();
+    });
+
+    const layoutMasonry = () => {
+      if (!(masonry instanceof HTMLElement)) {
+        return;
+      }
+
+      const styles = window.getComputedStyle(masonry);
+      const rowHeight = Number.parseFloat(styles.getPropertyValue("grid-auto-rows"));
+      const gap = Number.parseFloat(styles.getPropertyValue("gap"));
+      if (!rowHeight || Number.isNaN(rowHeight)) {
+        return;
+      }
+
+      masonry.querySelectorAll("[data-masonry-item]").forEach((item) => {
+        if (!(item instanceof HTMLElement)) {
+          return;
+        }
+
+        item.style.gridRowEnd = "auto";
+        const span = Math.ceil((item.getBoundingClientRect().height + gap) / (rowHeight + gap));
+        item.style.gridRowEnd = `span ${span}`;
+      });
+    };
+
+    const queueMasonry = () => window.requestAnimationFrame(layoutMasonry);
+
+    window.addEventListener("load", queueMasonry);
+    window.addEventListener("resize", queueMasonry);
+
+    if (masonry instanceof HTMLElement) {
+      masonry.querySelectorAll("img").forEach((image) => {
+        image.addEventListener("load", queueMasonry);
+      });
+
+      if ("ResizeObserver" in window) {
+        const observer = new ResizeObserver(queueMasonry);
+        masonry.querySelectorAll("[data-masonry-item]").forEach((item) => {
+          if (item instanceof HTMLElement) {
+            observer.observe(item);
+          }
+        });
+      }
+    }
+
+  </script>
+</BaseLayout>

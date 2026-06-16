@@ -1,0 +1,174 @@
+.card {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0.8rem;
+  border: 1px solid var(--line-strong);
+  background:
+    linear-gradient(180deg, rgba(27, 20, 18, 0.98), rgba(12, 10, 9, 0.98)),
+    var(--charcoal);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  break-inside: avoid;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.card:hover,
+.card:focus-within {
+  transform: translateY(-5px) rotate(-0.25deg);
+  box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+  border-color: rgba(216, 216, 202, 0.56);
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(140deg, rgba(214, 176, 129, 0.04), transparent 35%),
+    repeating-linear-gradient(
+      -35deg,
+      transparent 0,
+      transparent 12px,
+      rgba(216, 216, 202, 0.03) 12px,
+      rgba(216, 216, 202, 0.03) 13px
+    );
+  mix-blend-mode: screen;
+}
+
+.card:nth-child(4n + 1) {
+  transform: rotate(-0.55deg);
+}
+
+.card:nth-child(4n + 2) {
+  transform: rotate(0.38deg);
+}
+
+.card:nth-child(4n + 3) {
+  transform: rotate(-0.18deg);
+}
+
+.mediaButton {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.imageWrap {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  background:
+    radial-gradient(circle at center, rgba(216, 216, 202, 0.08), transparent 55%),
+    #161211;
+}
+
+.imageWrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent 30%, rgba(7, 6, 6, 0.08) 100%),
+    repeating-linear-gradient(
+      180deg,
+      transparent 0,
+      transparent 10px,
+      rgba(216, 216, 202, 0.03) 10px,
+      rgba(216, 216, 202, 0.03) 11px
+    );
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.48) contrast(1.12) sepia(0.24) brightness(0.9);
+  transition: transform 220ms ease;
+}
+
+.card:hover .image,
+.card:focus-within .image {
+  transform: scale(1.025);
+}
+
+.tag {
+  position: absolute;
+  left: 0.7rem;
+  top: 0.7rem;
+  padding: 0.34rem 0.5rem;
+  border: 1px solid rgba(216, 216, 202, 0.34);
+  background: rgba(8, 7, 7, 0.72);
+  color: var(--paper);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.body {
+  position: relative;
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.95rem 0.2rem 0.15rem;
+}
+
+.kicker {
+  color: rgba(193, 185, 166, 0.72);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  color: var(--paper-alt);
+  font-size: 1.42rem;
+  line-height: 1.02;
+  text-transform: uppercase;
+  max-width: 14ch;
+}
+
+.author {
+  margin: 0;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+}
+
+.rule {
+  width: 3rem;
+  height: 1px;
+  background: rgba(193, 185, 166, 0.26);
+}
+
+.actionButton {
+  appearance: none;
+  justify-self: start;
+  border: 1px solid rgba(193, 185, 166, 0.34);
+  background: rgba(193, 185, 166, 0.08);
+  color: var(--paper);
+  padding: 0.48rem 0.74rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease;
+}
+
+.actionButton:hover,
+.actionButton:focus-visible {
+  background: var(--paper-alt);
+  border-color: var(--paper-alt);
+  color: #181311;
+}

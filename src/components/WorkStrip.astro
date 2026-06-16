@@ -1,0 +1,36 @@
+---
+import type { Work } from "../data/works";
+import styles from "./WorkStrip.module.css";
+
+type Props = {
+  work: Work;
+  basePath: string;
+};
+
+const { work, basePath } = Astro.props;
+const title = work.title?.trim() || "未命名";
+const author = work.author?.trim() || "匿名观察者";
+const imagePath = `${basePath}${work.image.replace(/^\//, "")}`;
+---
+
+<article class={styles.strip} data-id={work.id}>
+  <div class={styles.body}>
+    <div class={styles.eyebrow}>Archive Fragment / Record {work.id}</div>
+    <h3 class={styles.title}>{title}</h3>
+    <div class={styles.meta}>作者：{author}</div>
+    <div class={styles.rule}></div>
+    <p class={styles.caption}>保留下来的无用结构 / 校园空间残余观察</p>
+  </div>
+
+  <button
+    type="button"
+    class={styles.mediaButton}
+    data-open-work={work.id}
+    aria-label={`查看 ${title} 的大图`}
+  >
+    <div class={styles.media}>
+      <img class={styles.image} src={imagePath} alt={`${title}，作者 ${author}`} loading="lazy" />
+    </div>
+    <span class={styles.cta}>展开图像</span>
+  </button>
+</article>

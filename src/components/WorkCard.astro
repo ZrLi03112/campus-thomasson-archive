@@ -1,0 +1,38 @@
+---
+import type { Work } from "../data/works";
+import styles from "./WorkCard.module.css";
+
+type Props = {
+  work: Work;
+  basePath: string;
+};
+
+const { work, basePath } = Astro.props;
+const title = work.title?.trim() || "未命名";
+const author = work.author?.trim() || "匿名观察者";
+const imagePath = `${basePath}${work.image.replace(/^\//, "")}`;
+---
+
+<article class={styles.card} id={`work-${work.id}`} data-work-card={work.id} data-masonry-item>
+  <button
+    type="button"
+    class={styles.mediaButton}
+    data-open-work={work.id}
+    aria-label={`查看 ${title} 的大图`}
+  >
+    <div class={styles.imageWrap}>
+      <img class={styles.image} src={imagePath} alt={`${title}，作者 ${author}`} loading="lazy" />
+      <span class={styles.tag}>Record {work.id}</span>
+    </div>
+  </button>
+
+  <div class={styles.body}>
+    <span class={styles.kicker}>Campus Thomasson Archive</span>
+    <h3 class={styles.title}>{title}</h3>
+    <p class={styles.author}>{author}</p>
+    <div class={styles.rule}></div>
+    <button type="button" class={styles.actionButton} data-open-work={work.id}>
+      查看大图
+    </button>
+  </div>
+</article>
