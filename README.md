@@ -6,14 +6,13 @@
 
 ## 项目结构
 
-这个仓库只保留网站运行和发布所必需的内容：
+这个仓库的内容：
 
 - `src/`：页面与组件源码
 - `public/works/`：站点实际使用的作品图片
 - `.github/workflows/deploy.yml`：GitHub Pages 自动部署配置
 - `astro.config.mjs`：Astro 构建与 Pages 路径配置
 
-原始素材、临时构建产物和本地缓存文件不再纳入公开仓库。
 
 ## 技术栈
 
@@ -84,7 +83,3 @@ public/works/work-001.jpg
 2. 打开仓库 `Settings > Pages`
 3. 将 `Source` 设置为 `GitHub Actions`
 4. 每次推送后，GitHub 会自动执行 `npm install`、`npm run build` 并发布站点
-
-## 说明
-
-本仓库面向公开展示与课程交流，已经去除了原始素材堆、构建缓存和本地中间文件，以便老师和同学更清楚地查看网站本体内容。
