@@ -12,8 +12,6 @@
 - `public/works/`：站点实际使用的作品图片
 - `.github/workflows/deploy.yml`：GitHub Pages 自动部署配置
 - `astro.config.mjs`：Astro 构建与 Pages 路径配置
-
-
 ## 技术栈
 
 - Astro
